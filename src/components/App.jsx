@@ -1,9 +1,8 @@
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Searchbar from '../components/Searchbar/Searchbar';
 import Button from 'components/Button/Button';
-// import ImageGalleryItem from '../components/ImageGalleryItem/ImageGalleryItem';
-//import ImageGallery from 'components/ImageGallery/ImageGallery';
 import Loader from '../components/Loader/Loader';
-import Modal from '../components/Modal/Modal';
 import './App.css'
 
 import React, { Component } from 'react'
@@ -11,23 +10,29 @@ import React, { Component } from 'react'
 class App extends Component {
 
   state = {
-    query: '',
     page: 1,
+    query: '', 
   }
 
-  //-------------------------------------------------'
-
 hendleSubmit =(e)=> {
+  e.preventDefault();
+ 
+  if(e.target.elements.query.value.length === 0){
+    toast("Заповніть поле для введеня !")
+    return
+  }
   this.setState({
-   query: e, 
+    page: 1,
+    query: e.target.elements.query.value,
   })  
+  e.target.reset()
 }
-
     
 loadMore =()=> {
   this.setState((prev)=>{
       return{
-      page: prev.page +1
+      page: prev.page +1,
+      error: null,
       }
   })
 }
@@ -35,12 +40,11 @@ loadMore =()=> {
 
   return (
     <div className='App'>
-      <Searchbar onSubmit={this.hendleSubmit}/> 
-       <Loader inputImage={this.state.query} inputPage={this.state.page}/>
+      <ToastContainer autoClose={1000}/>
+      <Searchbar onSubmit={this.hendleSubmit} /> 
+      <Loader page={this.state.page} query={this.state.query}/>
      
-      <Button ImageIncrement={this.loadMore}/>
-      <Modal />
-      
+      <Button onClick={this.loadMore}/>
     </div>
   );
   }
