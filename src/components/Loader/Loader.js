@@ -1,41 +1,44 @@
 import React, { Component } from 'react';
-import { RotatingLines } from 'react-loader-spinner';
+import { TailSpin } from 'react-loader-spinner';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ImageGallery from 'components/ImageGallery/ImageGallery';
+import Button from 'components/Button/Button'; 
 
 class Loader extends Component {
   state = {
     status: 'idle',
-    items: '' 
+    items: '',
+    page: 1, 
   };
 
   componentDidUpdate(prevProp, prevState) {
     if (
-      prevProp.page !== this.props.page ||
+      prevState.page !== this.state.page ||
       prevProp.query !== this.props.query
-    ) 
-    {
-      const KEY = "31604149-1ec6bd5e260d55d5538125f55";
-      const BASE_URL = "https://pixabay.com/api/";
+    ) {
+      const KEY = '31604149-1ec6bd5e260d55d5538125f55';
+      const BASE_URL = 'https://pixabay.com/api/';
 
       fetch(
-        `${BASE_URL}?key=${KEY}&q=${this.props.query}&page=${this.props.page}&orientation=horizontal&image_type=photo&safesearch=true&per_page=12`
+        `${BASE_URL}?key=${KEY}&q=${this.props.query}&page=${this.state.page}&orientation=horizontal&image_type=photo&safesearch=true&per_page=12`
       )
-      .then(response => {
-        if (response.status === 200) {
-          return response;
-        }
-        return Promise.reject(new Error(`Інформація відсутня`));
-      })
-      .then((loadData) => loadData.json())
-      .then((items) => this.setState({ items, status: "resolved" }))
-      .catch((error) => this.setState({ error, status: "rejected" }))
+        .then(loadData => loadData.json())
+        .then(items => this.setState({ items, status: 'resolved' }))
+        .catch(error => this.setState({ error, status: 'rejected' }));
     }
+   console.log(this.state.items)
   }
 
-  render() {
+  loadMore = () => {
+    this.setState(prev => {
+      return {
+        page: prev.page + 1,
+      };
+    });
+  };
 
+  render() {
     <ToastContainer autoClose={1000} />;
     const { status } = this.state;
     if (status === 'idle') {
@@ -44,11 +47,14 @@ class Loader extends Component {
     if (status === 'pending') {
       return (
         <div>
-          <RotatingLines
-            strokeColor="grey"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="96"
+          <TailSpin
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+            wrapperStyle={{}}
+            wrapperClass=""
             visible={true}
           />
         </div>
@@ -61,7 +67,7 @@ class Loader extends Component {
       return (
         <div>
           <ImageGallery loadData={this.state.items} />
-          
+          <Button onClick={this.loadMore} />
         </div>
       );
     }

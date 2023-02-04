@@ -15,8 +15,6 @@
   }
   .gallery-item{
     list-style: none;
-    max-width: 281px;
-    max-height: 200px;
     overflow: hidden;
 }
 .image{
