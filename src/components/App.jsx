@@ -1,8 +1,8 @@
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Searchbar from '../components/Searchbar/Searchbar';
+import SearchBar from './SearchBar/Search';
 import Loader from '../components/Loader/Loader';
-// import Modal from "./Modal/Modal";
+//import Modal from "./Modal/Modal";
 import './App.css';
 import React, { Component } from 'react';
 
@@ -12,7 +12,7 @@ class App extends Component {
     query: '',
   };
 
-  hendleSubmit = e => {
+  handleSubmit = e => {
     e.preventDefault();
 
     if (e.target.elements.query.value.length === 0) {
@@ -30,7 +30,7 @@ class App extends Component {
     return (
       <div className="App">
         <ToastContainer autoClose={1000} />
-        <Searchbar onSubmit={this.hendleSubmit} />
+        <SearchBar onSubmit={this.handleSubmit} />
         <Loader page={this.state.page} query={this.state.query} />
         {/* <Modal /> */}
       </div>
