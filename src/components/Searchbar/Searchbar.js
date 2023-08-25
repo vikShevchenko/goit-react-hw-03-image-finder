@@ -5,19 +5,24 @@ import { FiSearch } from 'react-icons/fi';
 export default class SearchBar extends Component {
   render() {
     return (
-      <div className="Searchbar">
+      <header className="searchbar">
         <form className="form" onSubmit={this.props.onSubmit}>
           <FiSearch size='1.5rem' className='icon' />
           <input
-            className='input'
+            className="input"
             type="text"
             autoComplete="off"
-            placeholder="Search images and photos"
             autoFocus
+            placeholder="Search images and photos"
             name="query"
           />
         </form>
-      </div>
+      </header>
     );
   }
 }
+
+
+
+
+
