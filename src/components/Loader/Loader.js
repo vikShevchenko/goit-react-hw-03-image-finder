@@ -7,13 +7,7 @@ import Button from 'components/Button/Button';
 
 
 class Loader extends Component {
-
-
-
   render() {
-
-
-
     <ToastContainer autoClose={1000} />;
     const { status } = this.props;
     if (status === 'idle') {

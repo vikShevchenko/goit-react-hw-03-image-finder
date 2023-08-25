@@ -2,13 +2,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SearchBar from './SearchBar/Searchbar';
 import Loader from '../components/Loader/Loader';
-import Modal from "./Modal/Modal";
 import './App.css';
 import React, { Component } from 'react';
 
 const KEY = '31604149-1ec6bd5e260d55d5538125f55';
 const BASE_URL = 'https://pixabay.com/api/';
-
 class App extends Component {
 
   state = {
@@ -59,18 +57,15 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.query)
     return (
-      <div className="App">
-        <ToastContainer autoClose={1000} />
+      <div className="App" >
+        <ToastContainer autoClose={1000} className='toast' />
         <SearchBar onSubmit={this.handleSubmit} />
         <Loader
-
           loadMore={this.loadMore}
           status={this.state.status}
           items={this.state.items}
         />
-        <Modal />
       </div>
     );
   }
