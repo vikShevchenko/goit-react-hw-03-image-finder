@@ -5,7 +5,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import ImageGallery from 'components/ImageGallery/ImageGallery';
 import Button from 'components/Button/Button';
 
-
 class Loader extends Component {
   render() {
     <ToastContainer autoClose={1000} />;
@@ -31,14 +30,14 @@ class Loader extends Component {
     }
 
     if (status === 'rejected') {
-      return <>{toast.error('Помилка!')}</>;
+      return <>{toast.error('Error!')}</>;
     }
 
     if (status === 'resolved') {
       return (
         <>
           <ImageGallery loadData={this.props.items} />
-          {this.props.items && <Button onClick={this.props.loadMore} />}
+          {this.props.items.length && this.props.btnVal >= 12 && <Button onClick={this.props.loadMore} />}
         </>
       );
     }

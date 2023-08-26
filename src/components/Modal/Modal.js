@@ -4,8 +4,13 @@ import './Modal.css'
 const Modal = ({ clickedImg, setClickedImg }) => {
 
   const handleClick = (e) => {
+    //----------------логіка яка не працює--------------
+    document.getElementById('root').style.overflow = 'hidden'
+    document.body.classList.add('disabledScroll')
+    //--------------------------------------------------
     if (e.target.classList.contains('dismiss')) {
       setClickedImg(null)
+
     }
   }
 

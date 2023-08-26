@@ -13,7 +13,8 @@ class App extends Component {
     query: '',
     status: 'idle',
     items: [],
-    page: 1
+    page: 1,
+    btnVal: 0
   };
 
   componentDidUpdate(prevProp, prevState) {
@@ -27,12 +28,16 @@ class App extends Component {
         &key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`
       )
         .then(loadData => loadData.json())
-        .then(items => this.setState(prev =>
-        ({
-          items: [...prev.items, ...items.hits],
-          status: 'resolved'
-        })))
+        .then(items => {
+          this.setState(prev =>
+          ({
+            items: [...prev.items, ...items.hits],
+            status: 'resolved',
+            btnVal: items.hits.length
+          }))
+        })
         .catch(error => this.setState({ error, status: 'rejected' }));
+
     }
   }
 
@@ -65,12 +70,10 @@ class App extends Component {
           loadMore={this.loadMore}
           status={this.state.status}
           items={this.state.items}
+          btnVal={this.state.btnVal}
         />
       </div>
     );
   }
 }
 export default App;
-
-
-

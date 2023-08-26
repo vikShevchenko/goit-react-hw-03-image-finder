@@ -68,7 +68,7 @@ code {
   z-index: 999;
   cursor: pointer;
 }
-.disabled-scroll{
+.disabledScroll{
   position: relative;
   overflow: hidden;
 }
