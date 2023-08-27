@@ -3,77 +3,80 @@ import 'react-toastify/dist/ReactToastify.css';
 import SearchBar from './SearchBar/Searchbar';
 import Loader from '../components/Loader/Loader';
 import './App.css';
-import React, { Component } from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 
-const KEY = '31604149-1ec6bd5e260d55d5538125f55';
-const BASE_URL = 'https://pixabay.com/api/';
-class App extends Component {
 
-  state = {
-    query: '',
-    status: 'idle',
-    items: [],
-    page: 1,
-    btnVal: 0
-  };
+const fetchItems = async ({
+  query = '',
+  page = 1,
+  KEY = '31604149-1ec6bd5e260d55d5538125f55',
+  BASE_URL = 'https://pixabay.com/api/'
+}) => {
+  return await axios.get(`${BASE_URL}?q=${query}&page=${page}
+  &key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`)
+}
 
-  componentDidUpdate(prevProp, prevState) {
-    if (
-      prevState.page !== this.state.page ||
-      prevState.query !== this.state.query
-    ) {
+const App = () => {
 
-      fetch(
-        `${BASE_URL}?q=${this.state.query}&page=${this.state.page}
-        &key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`
-      )
-        .then(loadData => loadData.json())
+  const [query, setQuery] = useState('')
+  const [status, setStatus] = useState('idle')
+  const [items, setItems] = useState([])
+  const [page, setPage] = useState(1)
+  const [btnVal, setBtnVal] = useState(0)
+
+
+  useEffect(() => {
+
+    if (!query) {
+      return
+    } else {
+
+      fetchItems({ query, page })
         .then(items => {
-          this.setState(prev =>
-          ({
-            items: [...prev.items, ...items.hits],
-            status: 'resolved',
-            btnVal: items.hits.length
-          }))
+          setItems(prev => [...prev, ...items.data.hits])
+          setStatus('resolved')
+          setBtnVal(items.data.hits.length)
         })
-        .catch(error => this.setState({ error, status: 'rejected' }));
-
+        .catch(error => setStatus('rejected'))
     }
-  }
 
-  handleSubmit = e => {
+  }, [query, page])
+
+  console.log(items)
+
+  const handleSubmit = e => {
     e.preventDefault();
     const text = e.target.elements.query.value
 
     if (text.length === 0) {
-      toast('Fill in the field!');
+      toast('Fill in the field!')
       return;
     }
-    this.setState({
-      query: text
-    });
-    e.target.reset();
-    this.setState({ items: [] })
-    this.setState({ page: 1 })
+
+    setQuery(text)
+    setItems([])
+    setPage(1)
+    e.target.reset()
+
   };
 
-  loadMore = () => {
-    this.setState(prev => ({ page: prev.page + 1 }))
+  const loadMore = () => {
+    setPage(prev => prev + 1)
   }
 
-  render() {
-    return (
-      <div className="App" >
-        <ToastContainer autoClose={1000} className='toast' />
-        <SearchBar onSubmit={this.handleSubmit} />
-        <Loader
-          loadMore={this.loadMore}
-          status={this.state.status}
-          items={this.state.items}
-          btnVal={this.state.btnVal}
-        />
-      </div>
-    );
-  }
+  return (
+    <div className="App" >
+      <ToastContainer autoClose={1000} className='toast' />
+      <SearchBar onSubmit={handleSubmit} />
+      <Loader
+        loadMore={loadMore}
+        status={status}
+        items={items}
+        btnVal={btnVal}
+      />
+    </div>
+  );
 }
+
 export default App;
