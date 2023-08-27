@@ -9,6 +9,13 @@ export default function ImageGallery({ loadData }) {
   const [clickedImg, setClickedImg] = useState(null)
   const onHandle = (largeImageURL) => {
     setClickedImg(largeImageURL)
+
+  }
+
+  if (clickedImg) {
+    document.body.classList.add('disabledScroll')
+  } else {
+    document.body.classList.remove('disabledScroll')
   }
 
   return (
